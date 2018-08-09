@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.ssm.dao.IUserDao">
+	<resultMap id="UserMapping" type="com.zy.ssm.domain.User">
+        <!-- id属性来映射主键字段 -->
+        <!-- <id column="order_id" property="id" javaType="int"/> -->
+        <!-- result属性映射非主键字段 -->
+        <result column="nick_name" property="nickName"/>
+        <result column="create_date" property="createDate" javaType="Date"/>
+    </resultMap>
+	<select id="getUserById" resultMap="UserMapping"
+		parameterType="String">
+		select * from user where id = #{id} limit 1
+	</select>
+	
+	 <select id="getUserByName" resultMap="UserMapping" parameterType="String">
+		select * from user where name = #{name} limit 1
+	</select>
+	<!-- <insert id="addUser" parameterType="com.zy.ssm.domain.User"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user (name,nick_name,password,mobile,create_date,avater,status)
+		values(#{name},#{nickName},#{password},#{mobile},#{createDate},#{avater},#{status})
+	</insert>
+	<update id="updateUserInfo" parameterType="com.zy.ssm.domain.User">
+		update user set name = #{name},nick_name = #{nickName},password=#{password},mobile=#{mobile},lastLogin_date=#{lastLoginDate} where id =#{id}
+	</update>
+	<delete id="deleteUserInfoById" parameterType="int">
+		delete from user where id = #{id}
+	</delete>  -->
+</mapper>
