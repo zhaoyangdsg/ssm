@@ -6,9 +6,11 @@ import com.zy.ssm.domain.User;
 
 @MapperScan
 public interface IUserDao {
-	User getUserById(String id);
+	User getUserById(Long id);
 	User getUserByName(String name);
 	int addUser(User user);
-	int updateUserInfo(User user);
-	int deleteUserInfoById(String id);
+	int updateUser(User user);
+	int deleteUser(Long id);
+	User getUserByMobile(String mobile);
+	
 }

@@ -8,24 +8,29 @@
         <!-- result属性映射非主键字段 -->
         <result column="nick_name" property="nickName"/>
         <result column="create_date" property="createDate" javaType="Date"/>
+        <result column="lastLogin_date" property="lastLoginDate" javaType = "Date" />
     </resultMap>
 	<select id="getUserById" resultMap="UserMapping"
-		parameterType="String">
+		parameterType="Long">
 		select * from user where id = #{id} limit 1
 	</select>
 	
 	 <select id="getUserByName" resultMap="UserMapping" parameterType="String">
 		select * from user where name = #{name} limit 1
 	</select>
-	<!-- <insert id="addUser" parameterType="com.zy.ssm.domain.User"
+	
+	<select id="getUserByMobile" resultMap="UserMapping" parameterType="String" >
+		select * from user where mobile = #{mobile} limit 1
+	</select>
+	<insert id="addUser" parameterType="com.zy.ssm.domain.User"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into user (name,nick_name,password,mobile,create_date,avater,status)
 		values(#{name},#{nickName},#{password},#{mobile},#{createDate},#{avater},#{status})
 	</insert>
-	<update id="updateUserInfo" parameterType="com.zy.ssm.domain.User">
-		update user set name = #{name},nick_name = #{nickName},password=#{password},mobile=#{mobile},lastLogin_date=#{lastLoginDate} where id =#{id}
+	<update id="updateUser" parameterType="com.zy.ssm.domain.User">
+		update user set name = #{name},nick_name = #{nickName},password=#{password},avater=#{avater},create_date=#{createDate},mobile=#{mobile},lastLogin_date=#{lastLoginDate} where id =#{id}
 	</update>
-	<delete id="deleteUserInfoById" parameterType="int">
+	<delete id="deleteUser" parameterType="Long">
 		delete from user where id = #{id}
-	</delete>  -->
+	</delete>  
 </mapper>
