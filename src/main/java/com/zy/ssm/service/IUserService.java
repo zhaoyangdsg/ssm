@@ -1,5 +1,7 @@
 package com.zy.ssm.service;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.zy.ssm.domain.User;
 public interface IUserService {
 	public enum RegistResult{SUCCESS,EXSIT,FAILURE}
@@ -10,4 +12,6 @@ public interface IUserService {
 	RegistResult registUser(User user);
 	
 	Boolean updateUser(User user);
+	
+	boolean uploadAvater(HttpServletRequest request,Long userId,String password);
 }

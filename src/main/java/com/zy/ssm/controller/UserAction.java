@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSON;
 import com.zy.ssm.domain.User;
 import com.zy.ssm.service.IUserService;
 import com.zy.ssm.service.IUserService.RegistResult;
+import com.zy.ssm.util.UploadUtil;
 
 @Controller
 @RequestMapping("/user")
@@ -97,6 +98,21 @@ public class UserAction {
 			return JSON.toJSON(result);
 		}
 		
+		return null;
+	}
+	
+	@RequestMapping("/uploadAvater")
+	public Object uploadAvater(ModelAndView model,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("success", false);
+		Long userId = Long.valueOf(request.getParameter("userId"));
+		String password = request.getParameter("password");
+		if (userService.uploadAvater(request, userId, password)) {
+			result.put("success", true);
+		}
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
 		return null;
 	}
 }
