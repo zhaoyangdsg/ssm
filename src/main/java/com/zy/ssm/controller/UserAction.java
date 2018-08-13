@@ -1,9 +1,17 @@
 package com.zy.ssm.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -15,6 +23,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
@@ -101,15 +111,33 @@ public class UserAction {
 		return null;
 	}
 	
+	@ResponseBody
 	@RequestMapping("/uploadAvater")
-	public Object uploadAvater(ModelAndView model,HttpServletRequest request){
+	public Object uploadAvater(ModelAndView model,HttpServletRequest request,String userId,String password) {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("success", false);
-		Long userId = Long.valueOf(request.getParameter("userId"));
-		String password = request.getParameter("password");
-		if (userService.uploadAvater(request, userId, password)) {
+//		Long userId = Long.valueOf(request.getParameter("userId"));
+//		String password = request.getParameter("password");
+		try {
+			MultipartRequest multipartRequest = (MultipartRequest)request;
+			List<MultipartFile> files = multipartRequest.getFiles("pic");
+			MultipartFile file = files.get(0);
+			BufferedInputStream bis = new BufferedInputStream(file.getInputStream());
+			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File("/Users/yangyang/file_upload/"+file.getOriginalFilename())));
+			byte[] bys = new byte[1024];
+			int len;
+			while((len = (bis.read(bys)))!=-1) {
+				bos.write(bys,0,len);
+				bos.flush();
+			}
+		}catch(IOException e) {
+			e.printStackTrace();	
+		}
+		
+		if (userService.uploadAvater(request)) {
 			result.put("success", true);
 		}
+		System.out.println( request.getMethod());
 		if ("POST".equals(request.getMethod())) {
 			return JSON.toJSON(result);
 		}

@@ -13,5 +13,5 @@ public interface IUserService {
 	
 	Boolean updateUser(User user);
 	
-	boolean uploadAvater(HttpServletRequest request,Long userId,String password);
+	boolean uploadAvater(HttpServletRequest request);
 }

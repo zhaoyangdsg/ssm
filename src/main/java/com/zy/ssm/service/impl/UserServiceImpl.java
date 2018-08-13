@@ -1,12 +1,16 @@
 package com.zy.ssm.service.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.fileupload.FileItem;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -71,22 +75,45 @@ public class UserServiceImpl implements IUserService {
 		}
 	}
 
-	public boolean uploadAvater(HttpServletRequest request, Long userId, String password) {
-		// 密码不为空
-		if (StringUtils.hasText(password)) {
-			User user = userDao.getUserById(userId);
-			if (StringUtils.hasText(user.getPassword()) && password.equals(user.getPassword())) {
-				String fileName = UUID.randomUUID().toString() + ".jpg";
-				boolean isOK = UploadUtil.uploadFile(request, fileName);
-				if (isOK) {
-					user.setAvater(fileName);
-					userDao.updateUser(user);
-					return true;
+	public boolean uploadAvater(HttpServletRequest request) {
+		Map<String,Object> paramAndFile = UploadUtil.getParamsOfFormData(request);
+		if (paramAndFile != null && paramAndFile.size()>0) {
+			Map<String,String> params = (Map<String, String>) paramAndFile.get("params");
+			HashMap<String,FileItem> fileItemsMap = (HashMap<String, FileItem>) paramAndFile.get("fileItems"); 
+			String userId = params.get("userId");
+			String password = params.get("password");
+			// id 密码不为空,文件FileItem 不为空
+			if (StringUtils.hasText(password) && StringUtils.hasText(userId)&&fileItemsMap.size()>0) {
+				User user = userDao.getUserById(Long.parseLong(userId));
+				if (StringUtils.hasText(user.getPassword()) && password.equals(user.getPassword())) {
+					String fileName = UUID.randomUUID().toString() + ".jpg";
+					FileItem  fileItem = fileItemsMap.get("pic");
+					boolean isOK = UploadUtil.uploadFile(request, fileItem, fileName);// .uploadFile(request, fileName);
+					System.out.println("isOK "+isOK);
+					if (isOK) {
+						user.setAvater(fileName);
+						userDao.updateUser(user);
+						return true;
+					}
 				}
-
 			}
 		}
 		return false;
+	}
+	
+	private String getRequestPayload(HttpServletRequest req) {
+	     StringBuilder sb = new StringBuilder();
+	     try(BufferedReader reader = req.getReader();) {
+	          char[]buff = new char[1024];
+	          int len;
+	          while((len = reader.read(buff)) != -1) {
+	              sb.append(buff,0, len);
+	          }
+	     }catch (IOException e) {
+	          e.printStackTrace();
+	     }
+	     System.out.println(sb.toString());
+	     return sb.toString();
 	}
 
 }
