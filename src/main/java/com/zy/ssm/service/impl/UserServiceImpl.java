@@ -101,6 +101,16 @@ public class UserServiceImpl implements IUserService {
 		return false;
 	}
 	
+	public boolean checkUser(Long id,String password) {
+		if (id != null && StringUtils.hasText(password)) {
+			User user = userDao.getUserById(id);
+			if (user != null && StringUtils.hasText(user.getPassword())&& user.getPassword().equals(password)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private String getRequestPayload(HttpServletRequest req) {
 	     StringBuilder sb = new StringBuilder();
 	     try(BufferedReader reader = req.getReader();) {
@@ -115,5 +125,7 @@ public class UserServiceImpl implements IUserService {
 	     System.out.println(sb.toString());
 	     return sb.toString();
 	}
+	
+	
 
 }

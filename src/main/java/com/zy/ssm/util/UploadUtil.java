@@ -1,6 +1,8 @@
 package com.zy.ssm.util;
 
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,6 +19,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 public class UploadUtil {
 	public static Map<String,Object> getParamsOfFormData(HttpServletRequest request) {
@@ -157,5 +161,42 @@ public class UploadUtil {
 			return false;
 		}
 		
+	}
+	
+	public static String uploadFileWithName(HttpServletRequest request,String name) {
+		BufferedInputStream bis = null;
+		BufferedOutputStream bos = null;
+		int len;
+		StringBuilder sb = null;
+		String fileName ;
+		try {
+			// 把request 转成 spring的 MultipartHttpServletRequest
+			MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest)request;
+			// 通过参数名 获取 MultipartFile List
+			List<MultipartFile> files = multipartRequest.getFiles(name);
+			sb = new StringBuilder(50);
+			for (int i = 0; i<files.size();i++) {
+				MultipartFile file = files.get(0);
+				bis = new BufferedInputStream(file.getInputStream());
+				fileName = "/Users/zhaoyang/file_upload/"+UUID.randomUUID()+file.getOriginalFilename();
+				bos = new BufferedOutputStream(new FileOutputStream(new File(fileName)));
+				byte[] bys = new byte[1024];
+				while((len = (bis.read(bys)))!=-1) {
+					bos.write(bys,0,len);
+					bos.flush();
+				}
+				sb.append(fileName).append(",");
+			}
+			// 删除最后一个 ","
+			if (sb.length()>0) {
+				sb.deleteCharAt(sb.length()-1);
+			}
+			bos.close();
+			bis.close();
+			return sb.toString();
+		}catch(IOException e) {
+			e.printStackTrace();	
+		}
+		return null;
 	}
 }

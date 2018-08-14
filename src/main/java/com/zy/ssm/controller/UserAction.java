@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,49 +38,49 @@ import com.zy.ssm.util.UploadUtil;
 @RequestMapping("/user")
 public class UserAction {
 
-	@Resource 
+	@Resource
 	IUserService userService;
-	
+
 	@ResponseBody
 	@RequestMapping("/login")
-	public Object login(String mobile,String password,ModelAndView model,HttpServletRequest request) {
-		System.out.println("user+password"+mobile+password);
-//		 User userItem = this.userService.getUserById("1");
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Object login(String mobile, String password, ModelAndView model, HttpServletRequest request) {
+		System.out.println("user+password" + mobile + password);
+		// User userItem = this.userService.getUserById("1");
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", "false");
-		 User userItem = this.userService.getUserByMobile(mobile);
-		 if (userItem != null) {
-			 if (StringUtils.hasText(userItem.getPassword()) && userItem.getPassword().equals(password)) {
-				 userItem.setLastLoginDate(new Date());
-				 userService.updateUser(userItem);
-				 result.put("success", "true");
-				 result.put("user", userItem);
-			 }else {
-				 result.put("error", "wrong password");
-			 }
-		 }else {
-			 result.put("error", "no user");
-		 }
-		 
-		 if("POST".equals(request.getMethod())) {
-			 return JSON.toJSON(result);
-		 }
+		User userItem = this.userService.getUserByMobile(mobile);
+		if (userItem != null) {
+			if (StringUtils.hasText(userItem.getPassword()) && userItem.getPassword().equals(password)) {
+				userItem.setLastLoginDate(new Date());
+				userService.updateUser(userItem);
+				result.put("success", "true");
+				result.put("user", userItem);
+			} else {
+				result.put("error", "wrong password");
+			}
+		} else {
+			result.put("error", "no user");
+		}
+
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/regist")
-	public Object regist(ModelAndView model,HttpServletRequest request) throws UnsupportedEncodingException {
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Object regist(ModelAndView model, HttpServletRequest request) throws UnsupportedEncodingException {
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
-		
+
 		String name = request.getParameter("name");
 		String nickName = request.getParameter("nickName");
 		String avater = request.getParameter("avater");
 		String password = request.getParameter("password");
 		String mobile = request.getParameter("mobile");
-		
-		User user  = new User();
+
+		User user = new User();
 		user.setAvater(avater);
 		user.setName(name);
 		user.setNickName(nickName);
@@ -90,54 +91,45 @@ public class UserAction {
 		System.out.println(user.toString());
 		RegistResult r = userService.registUser(user);
 		switch (r) {
-			case SUCCESS:
-				System.out.println("");
-				result.put("success", true);
-				break;
-			case FAILURE:
-				System.out.println();
-				result.put("error", "regist fail");
-				break;
-			case EXSIT:
-				System.out.println();;
-				result.put("error", "mobile exsit");
-				break;
+		case SUCCESS:
+			System.out.println("");
+			result.put("success", true);
+			break;
+		case FAILURE:
+			System.out.println();
+			result.put("error", "regist fail");
+			break;
+		case EXSIT:
+			System.out.println();
+			;
+			result.put("error", "mobile exsit");
+			break;
 		}
-		
+
 		if ("POST".equals(request.getMethod())) {
 			return JSON.toJSON(result);
 		}
-		
+
 		return null;
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/uploadAvater")
-	public Object uploadAvater(ModelAndView model,HttpServletRequest request,String userId,String password) {
-		Map<String,Object> result = new HashMap<String,Object>();
+	public Object uploadAvater(ModelAndView model, HttpServletRequest request, User user) {
+		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
-//		Long userId = Long.valueOf(request.getParameter("userId"));
-//		String password = request.getParameter("password");
-		try {
-			MultipartRequest multipartRequest = (MultipartRequest)request;
-			List<MultipartFile> files = multipartRequest.getFiles("pic");
-			MultipartFile file = files.get(0);
-			BufferedInputStream bis = new BufferedInputStream(file.getInputStream());
-			BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(new File("/Users/yangyang/file_upload/"+file.getOriginalFilename())));
-			byte[] bys = new byte[1024];
-			int len;
-			while((len = (bis.read(bys)))!=-1) {
-				bos.write(bys,0,len);
-				bos.flush();
+		Long id = Long.valueOf(user.getId());
+		String password = user.getPassword();
+		if (userService.checkUser(id, password)) {
+			String fileName = UploadUtil.uploadFileWithName(request, "pic");
+			if (fileName != null) {
+				User user1 = userService.getUserById(id);
+				user1.setAvater(fileName);
+				if (userService.updateUser(user1)) {
+					result.put("success", true);
+				}
 			}
-		}catch(IOException e) {
-			e.printStackTrace();	
 		}
-		
-		if (userService.uploadAvater(request)) {
-			result.put("success", true);
-		}
-		System.out.println( request.getMethod());
 		if ("POST".equals(request.getMethod())) {
 			return JSON.toJSON(result);
 		}
