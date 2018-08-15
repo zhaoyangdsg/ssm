@@ -18,7 +18,7 @@ public class MomentServiceImpl implements IMomentService {
 	
 	@Override
 	public List<Moment> getMoments(Long id) {
-		List<Moment> moments = momentDao.getMomentByUserId(id);
+		List<Moment> moments = momentDao.getMomentsByUserId(id);
 		System.out.println(moments.size());
 		if (moments.size() >0) {
 			return moments;

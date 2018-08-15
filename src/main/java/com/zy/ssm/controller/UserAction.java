@@ -121,4 +121,13 @@ public class UserAction {
 		}
 		return null;
 	}
+	
+	
+	
+	public Object updateUserInfo(HttpServletRequest request) {
+		return null;
+	}
+	public Object follow(HttpServletRequest request, String followedId,String followerId) {
+		return null;
+	}
 }

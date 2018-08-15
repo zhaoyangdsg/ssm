@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zy.ssm.dao.ICommentDao">
+<resultMap type="com.zy.ssm.domain.Comment" id="resultCommentMap">
+	<id property="id" column="id" />
+	<result property="content" column="content" javaType="String" jdbcType="VARCHAR"/>
+	<result property="userId" column="user_id"  />
+	
+	<result property="createDate" column="create_date"/>
+	<association property="user" javaType="com.zy.ssm.domain.User">
+		<id property="id" column="user_id"/>
+		<result property="name" column="name" />
+		<result property="avater" column="avater" /> 
+	</association>
+	 
+</resultMap>
+
+<select id="getCommentsByMomentId" resultMap="resultCommentMap">
+	select * from comment where moment_id = #{momentId}
+</select>
+
+
+</mapper>

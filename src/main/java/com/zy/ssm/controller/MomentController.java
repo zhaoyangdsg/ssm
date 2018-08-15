@@ -31,4 +31,27 @@ public class MomentController {
 		}
 		return null;
 	}
+	
+	public Object zan(HttpServletRequest request, String userId,String momentId) {
+		
+		return null;
+	}
+	public Object cancelZan(HttpServletRequest request, String userId,String momentId) {
+		
+		return null;
+	}
+	public Object deleteMoment(HttpServletRequest request, String userId,String momentId) {
+		
+		return null;
+	}
+	public Object addMoment(HttpServletRequest request, String userId,String momentId) {
+		
+		return null;
+	}
+	public Object updateMoment(HttpServletRequest request, String userId,String momentId) {
+		
+		return null;
+	}
+	
+	
 }
