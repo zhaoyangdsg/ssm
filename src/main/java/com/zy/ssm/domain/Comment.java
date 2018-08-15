@@ -7,12 +7,11 @@ public class Comment {
 	private Long userId;
 	private String content;
 	private Date createDate;
-	public Comment(Long id, Long userId, String content, Date createDate) {
+	private User user;
+
+
+	public Comment() {
 		super();
-		this.id = id;
-		this.userId = userId;
-		this.content = content;
-		this.createDate = createDate;
 	}
 	public Long getId() {
 		return id;
@@ -37,6 +36,13 @@ public class Comment {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	@Override
 	public String toString() {

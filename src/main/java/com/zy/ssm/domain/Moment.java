@@ -13,17 +13,17 @@ public class Moment {
 	private String position;
 	private Date createDate;
 	private List<Comment> comments;
-	
-	@Override
-	public String toString() {
-		return "Moment [id=" + id + ", userId=" + userId + ", imgs=" + imgs + ", content=" + content + ", zanNum="
-				+ zanNum + ", commentNum=" + commentNum + ", position=" + position + ", createDate=" + createDate + "]";
-	}
+	private User user;
+
 	public Moment() {
 		super();
+		
 	}
+	
+	
+	
 	public Moment(Long id, Long userId, String imgs, String content, Integer zanNum, Integer commentNum,
-			String position, Date createDate) {
+			String position, Date createDate, List<Comment> comments, User user) {
 		super();
 		this.id = id;
 		this.userId = userId;
@@ -33,9 +33,9 @@ public class Moment {
 		this.commentNum = commentNum;
 		this.position = position;
 		this.createDate = createDate;
+		this.comments = comments;
+		this.user = user;
 	}
-	
-	
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -89,6 +89,12 @@ public class Moment {
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	
