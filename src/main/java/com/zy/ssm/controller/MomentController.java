@@ -32,6 +32,7 @@ public class MomentController {
 		return null;
 	}
 	
+	@RequestMapping("/momentZan")
 	public Object zan(HttpServletRequest request, String userId,String momentId) {
 		
 		return null;

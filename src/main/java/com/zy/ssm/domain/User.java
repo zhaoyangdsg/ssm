@@ -7,7 +7,7 @@ public class User {
 	private String name;
 	private String nickName;
 	private String password;
-	private String avater;
+	private String avatar;
 	private String mobile;
 	private Date createDate ;
 	private Date lastLoginDate ;
@@ -38,11 +38,12 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public String getAvater() {
-		return avater;
+	
+	public String getAvatar() {
+		return avatar;
 	}
-	public void setAvater(String avater) {
-		this.avater = avater;
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 	public String getMobile() {
 		return mobile;
@@ -74,24 +75,12 @@ public class User {
 	public User() {
 		super();
 	}
-	public User(Long id, String name, String nickName, String password, String avater, String mobile, Date createDate,
-			Date lastLoginDate, Integer status) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.nickName = nickName;
-		this.password = password;
-		this.avater = avater;
-		this.mobile = mobile;
-		this.createDate = createDate;
-		this.lastLoginDate = lastLoginDate;
-		this.status = status;
-	}
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", nickName=" + nickName + ", password=" + password + ", avater=" + avater
-				+ ", mobile=" + mobile + ", createDate=" + createDate + ", lastLoginDate=" + lastLoginDate + ", status="
-				+ status + "]";
+		return "User [id=" + id + ", name=" + name + ", nickName=" + nickName + ", password=" + password + ", avatar="
+				+ avatar + ", mobile=" + mobile + ", createDate=" + createDate + ", lastLoginDate=" + lastLoginDate
+				+ ", status=" + status + "]";
 	}
+
 
 }

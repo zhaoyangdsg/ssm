@@ -62,12 +62,12 @@ public class UserAction {
 
 		String name = request.getParameter("name");
 		String nickName = request.getParameter("nickName");
-		String avater = request.getParameter("avater");
+		String avatar = request.getParameter("avatar");
 		String password = request.getParameter("password");
 		String mobile = request.getParameter("mobile");
 
 		User user = new User();
-		user.setAvater(avater);
+		user.setAvatar(avatar);
 		user.setName(name);
 		user.setNickName(nickName);
 		user.setPassword(password);
@@ -110,7 +110,7 @@ public class UserAction {
 			String fileName = UploadUtil.uploadFileWithName(request, "pic");
 			if (fileName != null) {
 				User user1 = userService.getUserById(id);
-				user1.setAvater(fileName);
+				user1.setAvatar(fileName);
 				if (userService.updateUser(user1)) {
 					result.put("success", true);
 				}
@@ -123,11 +123,43 @@ public class UserAction {
 	}
 	
 	
-	
-	public Object updateUserInfo(HttpServletRequest request) {
+	@ResponseBody
+	@RequestMapping("/updateUser")
+	public Object updateUserInfo(HttpServletRequest request,User user) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("success", false);
+		if (userService.getUserById(user.getId()) != null ) {
+			if ( userService.updateUser(user)) {
+				result.put("success", true);
+			}
+		}
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
+		
 		return null;
 	}
-	public Object follow(HttpServletRequest request, String followedId,String followerId) {
+	
+	@ResponseBody
+	@RequestMapping("/follow")
+	public Object follow(HttpServletRequest request, String followedId,String userId) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("success", false);
+		if (StringUtils.hasText(userId)&&StringUtils.hasText(followedId) && followedId != userId) {
+			Long l_userId = Long.parseLong(userId);
+			Long l_followedId = Long.parseLong(followedId);
+			if (userService.getUserById(l_userId) != null && userService.getUserById(l_followedId) != null ) {
+				if ( userService.followUser(l_followedId, l_userId)) {
+					result.put("success", true);
+				}
+			}
+		}
+		
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
+		
 		return null;
 	}
 }

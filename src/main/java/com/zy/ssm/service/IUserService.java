@@ -16,4 +16,6 @@ public interface IUserService {
 	boolean uploadAvater(HttpServletRequest request);
 	
 	boolean checkUser(Long id,String password);
+	
+	boolean followUser(Long followedId,Long userId);
 }

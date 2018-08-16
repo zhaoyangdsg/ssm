@@ -28,9 +28,42 @@
 		values(#{name},#{nickName},#{password},#{mobile},#{createDate},#{avater},#{status})
 	</insert>
 	<update id="updateUser" parameterType="com.zy.ssm.domain.User">
-		update user set name = #{name},nick_name = #{nickName},password=#{password},avater=#{avater},create_date=#{createDate},mobile=#{mobile},lastLogin_date=#{lastLoginDate} where id =#{id}
+		update user 
+		<set>
+			<if test="name != null and name != '' ">
+				name = #{name},
+			</if>
+			<if test="nickName != null and nickName != ''">
+				nick_name = #{nickName},
+			</if>
+			<if test="password != null and password != ''">
+				password=#{password},
+			</if>
+			<if test="avater != null and avater != ''" >
+				avater=#{avater},
+			</if>
+			<if test="createDate != null">
+				create_date=#{createDate},
+			</if>
+			<if test="mobile != null and mobile != ''">
+				mobile=#{mobile},
+			</if>
+			<if test="lastLoginDate != null" >
+				lastLogin_date=#{lastLoginDate}
+			</if>
+		</set>  
+		where id =#{id}
 	</update>
 	<delete id="deleteUser" parameterType="Long">
 		delete from user where id = #{id}
 	</delete>  
+	<insert id="followUser" parameterType="com.zy.ssm.domain.Follow" >
+		insert into user_follow (followed_user_id,user_id) values(#{followedId},#{userId})
+	</insert>
+	<select id="checkFollow" parameterType="com.zy.ssm.domain.Follow" >
+		select count(*) from user_follow where user_id = #{userId} and followed_user_id = #{followedId}
+	</select>
+	<delete id="cancelFollow" parameterType="com.zy.ssm.domain.Follow" >
+		delete from user_follow where followed_user_id=#{followedId} and userId=#{userId} 
+	</delete>
 </mapper>

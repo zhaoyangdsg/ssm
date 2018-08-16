@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.zy.ssm.dao.IUserDao;
+import com.zy.ssm.domain.Follow;
 import com.zy.ssm.domain.User;
 import com.zy.ssm.service.IUserService;
 import com.zy.ssm.util.UploadUtil;
@@ -91,7 +92,7 @@ public class UserServiceImpl implements IUserService {
 					boolean isOK = UploadUtil.uploadFile(request, fileItem, fileName);// .uploadFile(request, fileName);
 					System.out.println("isOK "+isOK);
 					if (isOK) {
-						user.setAvater(fileName);
+						user.setAvatar(fileName);
 						userDao.updateUser(user);
 						return true;
 					}
@@ -125,7 +126,31 @@ public class UserServiceImpl implements IUserService {
 	     System.out.println(sb.toString());
 	     return sb.toString();
 	}
+
+	@Override
+	public boolean followUser(Long followedId,Long userId) {
+		Follow follow = new Follow();
+		follow.setFollowedId(followedId);
+		follow.setUserId(userId);
+		if (userDao.checkFollow(follow) > 0) {
+			int row = userDao.followUser(follow);
+			if (row >0) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 	
-	
+	public boolean cancelFollowUser(Long followedId,Long userId) {
+		Follow follow = new Follow();
+		follow.setFollowedId(followedId);
+		follow.setUserId(userId);
+		int row = userDao.cancelFollow(follow);
+		if (row >0) {
+			return true;
+		}
+		return false;
+	}
 
 }
