@@ -4,62 +4,91 @@
 <mapper namespace="com.zy.ssm.dao.IMomentDao">
 <resultMap type="com.zy.ssm.domain.Moment" id="resultMomentMap">
 	<id property="id" column="m_id" />
-	<result property="content" column="m_content" javaType="String" jdbcType="BLOB"/>
+	<!-- <result property="content" column="m_content" javaType="String" jdbcType="BLOB"/> -->
+	<result property="shortContent" column="short_content" />
 	<result property="userId" column="m_user_id"  />
+	<result property="userAvatar" column="m_avatar" />
+	<result property="userName" column="m_name"/>
 	<result property="zanNum" column="zan_num" />
 	<result property="commentNum" column="comment_num"/>
 	<result property="createDate" column="m_create_date"/>
-	<association property="user" javaType="com.zy.ssm.domain.User">
+	<!-- <association property="user" javaType="com.zy.ssm.domain.User">
 		<id property="id" column="m_user_id"/>
 		<result property="name" column="m_name" />
 		<result property="avater" column="m_avater" /> 
-	</association>
+	</association> -->
 	 <collection property="comments" ofType="com.zy.ssm.domain.Comment" >
 	 	<id property="id" column="c_id" />
 		<result property="content" column="c_content" javaType="String" jdbcType="VARCHAR" />
+		<result property="userName" column="c_name" javaType="String" jdbcType="VARCHAR" />
+		<result property="userAvatar" column="c_avatar"/>
 		<result property="createDate" column="c_create_date"/>
-		<association property="user" javaType="com.zy.ssm.domain.User" >
+		
+		<!-- <association property="user" javaType="com.zy.ssm.domain.User" >
 			<id property="id" column="c_user_id" />
 			<result property="name" column="c_name" />
 			<result property="avater" column="c_avater"/>
-		</association>
+		</association> -->
 	</collection> 
 </resultMap>
+<resultMap type="com.zy.ssm.domain.Moment" id="detailMomentResultMap">
+	<id property="id" column="m_id" />
+	<result property="content" column="m_content" javaType="String" jdbcType="BLOB"/>
+	<result property="userId" column="m_user_id"  />
+	<result property="userAvatar" column="m_avatar" />
+	<result property="userName" column="m_name"/>
+	<result property="zanNum" column="zan_num" />
+	<result property="commentNum" column="comment_num"/>
+	<result property="createDate" column="m_create_date"/>
+</resultMap>
+
 
 <select id="getMomentsByUserId" resultMap="resultMomentMap">
-	select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
+	select m.id as m_id, m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
 	c.content as c_content,c.create_date as c_create_date,c.id as c_id,
-	u1.name as m_name,u1.avater as m_avater,u2.name as c_name,u2.avater as c_avater,u2.id as c_user_id
-	from moment m , comment c  ,user u1,user u2
-	where c.moment_id = m.id and m.user_id = u1.id and c.user_id = u2.id and m.user_id = #{userId}
+	m.user_name as m_name,m.user_avatar as m_avatar,c.user_name as c_name,c.user_avatar as c_avatar,c.user_id as c_user_id
+	from moment m
+	<!-- left join user u1 on m.user_id = u1.id -->
+	left join comment c  on  c.moment_id = m.id
+	<!-- left join user u2 on c.user_id = u2.id -->
+	where m.user_id = #{userId}
+	order by m.create_date desc
 	limit 10
 </select>
 
 <select id="getAllMoments" resultMap="resultMomentMap">
-	select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
+	select m.id as m_id, m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
 	c.content as c_content,c.create_date as c_create_date,c.id as c_id,
-	u1.name as m_name,u1.avater as m_avater,u2.name as c_name,u2.avater as c_avater,u2.id as c_user_id
-	from moment m , comment c  ,user u1,user u2
-	where c.moment_id = m.id and m.user_id = u1.id and c.user_id = u2.id
+	m.user_name as m_name,m.user_avatar as m_avatar,c.user_name as c_name,c.user_avatar as c_avatar,c.user_id as c_user_id
+	from moment m
+	left join comment c  on  c.moment_id = m.id
 	order by m.create_date desc
 	limit 10
 </select>
 <select id="getFollowedMoments" resultMap="resultMomentMap">
-	select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
+	select m.id as m_id, m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
 	c.content as c_content,c.create_date as c_create_date,c.id as c_id,
-	u1.name as m_name,u1.avater as m_avater,u2.name as c_name,u2.avater as c_avater,u2.id as c_user_id
-	from moment m , comment c  ,user u1,user u2
-	where c.moment_id = m.id and m.user_id = u1.id and c.user_id = u2.id
+	m.user_name as m_name,m.user_avatar as m_avatar,c.user_name as c_name,c.user_avatar as c_avatar,c.user_id as c_user_id
+	from moment m
+	left join user_follow uf on m.user_id = uf.followed_user_id
+	left join comment c  on  c.moment_id = m.id
+	where uf.user_id = #{userId}
 	order by m.create_date desc
 	limit 10
 </select>
-<select id="getMomentById" resultMap="resultMomentMap">
-	select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
+<select id="getMomentDetailById" resultMap="detailMomentResultMap">
+	<!-- select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
 	c.content as c_content,c.create_date as c_create_date,c.id as c_id,
-	u1.name as m_name,u1.avater as m_avater,u2.name as c_name,u2.avater as c_avater,u2.id as c_user_id
-	from moment m , comment c  ,user u1,user u2
-	where c.moment_id = m.id and m.user_id = u1.id and c.user_id = u2.id
-	order by m.create_date desc
-	limit 10
+	u1.name as m_name,u1.avatar as m_avatar,u2.name as c_name,u2.avatar as c_avatar,u2.id as c_user_id
+	from moment m
+	left join user u1 on m.user_id = u1.id
+	left join comment c  on  c.moment_id = m.id
+	left join user u2 on c.user_id = u2.id -->
+	select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,
+	m.create_date as m_create_date,m.user_name as m_name,m.user_avatar as m_avatar
+	where m.id = #{id}
 </select>
+<delete id="deleteMomentById">
+	delete from moment where id = #{moment_id}
+</delete>
 </mapper>

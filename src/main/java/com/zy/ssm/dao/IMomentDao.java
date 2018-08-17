@@ -9,4 +9,5 @@ import com.zy.ssm.domain.Moment;
 @MapperScan
 public interface IMomentDao {
 	List<Moment> getMomentsByUserId(Long id);
+	Moment getMomentDetailById(Long id);
 }

@@ -1,12 +1,17 @@
 package com.zy.ssm.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class Comment {
 	private Long id;
+	private Long parentId;
 	private Long userId;
+	private String userAvatar;
+	private String userName;
 	private String content;
 	private Date createDate;
+	private List<Comment> commentsList;
 	private User user;
 
 
@@ -47,6 +52,30 @@ public class Comment {
 	@Override
 	public String toString() {
 		return "Comment [id=" + id + ", userId=" + userId + ", content=" + content + ", createDate=" + createDate + "]";
+	}
+	public String getUserAvatar() {
+		return userAvatar;
+	}
+	public void setUserAvatar(String userAvatar) {
+		this.userAvatar = userAvatar;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public List<Comment> getCommentsList() {
+		return commentsList;
+	}
+	public void setCommentsList(List<Comment> commentsList) {
+		this.commentsList = commentsList;
+	}
+	public Long getParentId() {
+		return parentId;
+	}
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
 	}
 	
 	

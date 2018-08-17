@@ -4,20 +4,23 @@
 <mapper namespace="com.zy.ssm.dao.ICommentDao">
 <resultMap type="com.zy.ssm.domain.Comment" id="resultCommentMap">
 	<id property="id" column="id" />
+	<result property="parentId" column="parent_id" />
 	<result property="content" column="content" javaType="String" jdbcType="VARCHAR"/>
 	<result property="userId" column="user_id"  />
-	
+	<result property="userName" column="user_name" />
+	<result property="userAvatar" column="user_avatar" /> 
 	<result property="createDate" column="create_date"/>
-	<association property="user" javaType="com.zy.ssm.domain.User">
+	<!-- <association property="user" javaType="com.zy.ssm.domain.User">
 		<id property="id" column="user_id"/>
 		<result property="name" column="name" />
 		<result property="avater" column="avater" /> 
-	</association>
+	</association> -->
 	 
 </resultMap>
 
 <select id="getCommentsByMomentId" resultMap="resultCommentMap">
-	select * from comment where moment_id = #{momentId}
+	select c1.*
+	where c1.moment_id = #{momentId}
 </select>
 
 
