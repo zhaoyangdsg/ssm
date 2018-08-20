@@ -175,8 +175,9 @@ public class UploadUtil {
 			// 通过参数名 获取 MultipartFile List
 			List<MultipartFile> files = multipartRequest.getFiles(name);
 			sb = new StringBuilder(50);
+			MultipartFile file;
 			for (int i = 0; i<files.size();i++) {
-				MultipartFile file = files.get(0);
+				file = files.get(i);
 				bis = new BufferedInputStream(file.getInputStream());
 				fileName = "/Users/zhaoyang/file_upload/"+UUID.randomUUID()+file.getOriginalFilename();
 				bos = new BufferedOutputStream(new FileOutputStream(new File(fileName)));
@@ -187,13 +188,20 @@ public class UploadUtil {
 				}
 				sb.append(fileName).append(",");
 			}
+			if (bos != null) {
+				bos. close();
+			}
+			if (bis != null) {
+				bis.close();
+			}
+			
 			// 删除最后一个 ","
 			if (sb.length()>0) {
 				sb.deleteCharAt(sb.length()-1);
+				return sb.toString();
 			}
-			bos.close();
-			bis.close();
-			return sb.toString();
+			
+			return null;
 		}catch(IOException e) {
 			e.printStackTrace();	
 		}

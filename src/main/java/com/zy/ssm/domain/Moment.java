@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Moment {
 	private Long id;
-	private Long userId;
+	private String userId;
 	private String userAvatar;
 	private String userName;
 	private String imgs;
@@ -15,7 +15,7 @@ public class Moment {
 	private Integer commentNum;
 	private String position;
 	private Date createDate;
-	private List<Comment> comments;
+	//private List<Comment> comments;
 //	private User user;
 
 	public Moment() {
@@ -23,24 +23,27 @@ public class Moment {
 		
 	}
 	
-	public List<Comment> getComments() {
-		return comments;
-	}
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
+//	public List<Comment> getComments() {
+//		return comments;
+//	}
+//	public void setComments(List<Comment> comments) {
+//		this.comments = comments;
+//	}
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getUserId() {
+	
+	public String getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
+
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
 	public String getImgs() {
 		return imgs;
 	}
@@ -110,6 +113,13 @@ public class Moment {
 
 	public void setShortContent(String shortContent) {
 		this.shortContent = shortContent;
+	}
+
+	@Override
+	public String toString() {
+		return "Moment [id=" + id + ", userId=" + userId + ", userAvatar=" + userAvatar + ", userName=" + userName
+				+ ", imgs=" + imgs + ", content=" + content + ", shortContent=" + shortContent + ", zanNum=" + zanNum
+				+ ", commentNum=" + commentNum + ", position=" + position + ", createDate=" + createDate + ", comments="+  "]";
 	}
 	
 	

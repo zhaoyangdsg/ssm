@@ -40,4 +40,12 @@ public class MomentServiceImpl implements IMomentService {
 		return null;
 	}
 	
+	public boolean addMoment(Moment moment) {
+		if ( momentDao.addMoment(moment) >0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 }

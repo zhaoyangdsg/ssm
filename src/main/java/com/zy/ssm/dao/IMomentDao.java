@@ -10,4 +10,6 @@ import com.zy.ssm.domain.Moment;
 public interface IMomentDao {
 	List<Moment> getMomentsByUserId(Long id);
 	Moment getMomentDetailById(Long id);
+	
+	int addMoment(Moment moment);
 }
