@@ -33,8 +33,7 @@ public class MomentController {
 	@RequestMapping("/momentsOfUser")
 	public Object getUserMoment(HttpServletRequest request, String id) {
 		System.out.println(id);
-		List<Moment> moments = momentService.getMoments(Long.parseLong(id));
-		System.out.println(JSON.toJSONString(moments));
+		List<Moment> moments = momentService.getMomentsByUserId(Long.parseLong(id));
 		if ("POST".equals(request.getMethod())) {
 			return JSON.toJSONString(moments);
 		}
@@ -63,35 +62,32 @@ public class MomentController {
 	public Object addMoment(HttpServletRequest request, Moment moment) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
-//		System.out.println(moment.toString());
-		System.out.println( request.getParameter("content"));
-		System.out.println(request.getParameter("userId"));
-		Long id = Long.valueOf(moment.getUserId());
-		String fileName = UploadUtil.uploadFileWithName(request, "pic");
-		User user = userService.getUserById(id);
-		moment.setUserAvatar(user.getAvatar());
-		moment.setUserName(user.getName());
-		moment.setCreateDate(new Date());
-		if (moment.getContent() != null && moment.getContent().length() > 100) {
-			moment.setShortContent(moment.getContent().substring(0, 100));
-		}else if (moment.getContent() != null && moment.getContent().length() <= 100) {
-			moment.setShortContent(moment.getContent());
-		}
-		if (fileName != null) {
-			moment.setImgs(fileName);
-		}
-		if ( momentService.addMoment(moment)) {
+		if ( momentService.addMoment(request,moment)) {
 			result.put("success", true);
 		}
-
 		if ("POST".equals(request.getMethod())) {
 			return JSON.toJSON(result);
 		}
 		return null;
 	}
 
-	public Object updateMoment(HttpServletRequest request, String userId, String momentId) {
-
+	public Object updateMoment(HttpServletRequest request, Moment moment) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("success", false);
+		if (moment.getId() != null && moment.getUserId() != null && moment.getContent() != null) {
+			Long id = Long.valueOf(moment.getId());
+			Moment m = momentService.getMomentById(id);
+			if (m !=null) {
+				
+				if (moment.getContent() != null && moment.getContent().length() > 100) {
+					m.setShortContent(moment.getContent().substring(0, 100));
+				}else if (moment.getContent() != null && moment.getContent().length() <= 100) {
+					m.setShortContent(moment.getContent());
+				}
+				m.setContent(moment.getContent());
+			}
+		}
+		
 		return null;
 	}
 

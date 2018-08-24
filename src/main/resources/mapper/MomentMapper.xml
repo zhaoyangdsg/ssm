@@ -34,6 +34,7 @@
 <resultMap type="com.zy.ssm.domain.Moment" id="detailMomentResultMap">
 	<id property="id" column="m_id" />
 	<result property="content" column="m_content" javaType="String" jdbcType="BLOB"/>
+	<result property="shortContent" column="short_content"/>
 	<result property="userId" column="m_user_id"  />
 	<result property="userAvatar" column="m_avatar" />
 	<result property="userName" column="m_name"/>
@@ -44,25 +45,29 @@
 
 
 <select id="getMomentsByUserId" resultMap="resultMomentMap">
-	select m.id as m_id, m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
-	c.content as c_content,c.create_date as c_create_date,c.id as c_id,
-	m.user_name as m_name,m.user_avatar as m_avatar,c.user_name as c_name,c.user_avatar as c_avatar,c.user_id as c_user_id
+	select m.id as m_id,m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
+	m.user_name as m_name,m.user_avatar as m_avatar,
+	com.user_name as
+	c_name,com.content as c_content
 	from moment m
-	<!-- left join user u1 on m.user_id = u1.id -->
-	left join comment c  on  c.moment_id = m.id
-	<!-- left join user u2 on c.user_id = u2.id -->
-	where m.user_id = #{userId}
-	order by m.create_date desc
+	left join 
+	(select c1.id,c1.moment_id, c1.content,c1.user_name from comment c1 where 
+	 <![CDATA[( select count(1) from comment c2 where c2.moment_id = c1.moment_id and c2.id > c1.id ) < 2]]>
+	 where m.user_id = #{userId}
+	 order by c1.id desc ) as com on com.moment_id = m.id
 	limit 10
 </select>
 
 <select id="getAllMoments" resultMap="resultMomentMap">
-	select m.id as m_id, m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
-	c.content as c_content,c.create_date as c_create_date,c.id as c_id,
-	m.user_name as m_name,m.user_avatar as m_avatar,c.user_name as c_name,c.user_avatar as c_avatar,c.user_id as c_user_id
+	select m.id as m_id,m.short_content as short_content,m.user_id as m_user_id,m.zan_num,m.comment_num,m.create_date as m_create_date,
+	m.user_name as m_name,m.user_avatar as m_avatar,
+	com.user_name as
+	c_name,com.content as c_content
 	from moment m
-	left join comment c  on  c.moment_id = m.id
-	order by m.create_date desc
+	left join 
+	(select c1.id,c1.moment_id, c1.content,c1.user_name from comment c1 where 
+	 <![CDATA[( select count(1) from comment c2 where c2.moment_id = c1.moment_id and c2.id > c1.id ) < 2]]>
+	 order by c1.id desc ) as com on com.moment_id = m.id
 	limit 10
 </select>
 <select id="getFollowedMoments" resultMap="resultMomentMap">
@@ -84,7 +89,7 @@
 	left join user u1 on m.user_id = u1.id
 	left join comment c  on  c.moment_id = m.id
 	left join user u2 on c.user_id = u2.id -->
-	select m.id as m_id, m.content as m_content,m.user_id as m_user_id,m.zan_num,m.comment_num,
+	select m.id as m_id, m.content as m_content,m.short_content ,m.user_id as m_user_id,m.zan_num,m.comment_num,
 	m.create_date as m_create_date,m.user_name as m_name,m.user_avatar as m_avatar
 	where m.id = #{id}
 </select>
@@ -95,4 +100,35 @@
 	insert into moment (user_id,user_name,user_avatar,imgs,content,short_content,create_date) 
 	values (#{userId},#{userName},#{userAvatar},#{imgs},#{content},#{shortContent},#{createDate})
 </insert>
+
+<update id="updateMoment" parameterType="com.zy.ssm.domain.Moment" >
+	update moment 
+	<set>
+		<if test="userAvatar != null">
+			user_avatar = #{userAvatar},
+		</if>
+		<if test="userName != null">
+			user_Name = #{userName},
+		</if>
+		<if test="imgs != null">
+			imgs = #{imgs},
+		</if>
+		<if test="content != null">
+			content = #{content},
+		</if>
+		<if test="shortContent != null">
+			short_content = #{shortContent},
+		</if>
+		<if test="zanNum != null">
+			zan_num = #{zanNum},
+		</if>
+		<if test="createDate != null">
+			create_date = #{createDate},
+		</if>
+		<if test="commentNum != null">
+			comment_num = #{commentNum},
+		</if>
+	</set>
+	where id = #{id}
+</update>
 </mapper>

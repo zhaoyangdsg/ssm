@@ -3,17 +3,28 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans  
 	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd  
 	http://www.springframework.org/schema/context  
 	http://www.springframework.org/schema/context/spring-context-3.1.xsd  
 	http://www.springframework.org/schema/mvc  
-	http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 	
+	
+	<!-- 
+	
+	 -->
 	<!-- 注解 -->
 	<context:annotation-config />
 	<!-- 自动扫描 -->
-	<context:component-scan base-package="com.zy" />
+	<context:component-scan base-package="com.zy.ssm" />
+	
 	<!-- 引入配置文件 -->
 	<bean id="propertyConfigurer"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
@@ -53,7 +64,7 @@
 	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="com.zy.ssm.dao" />
-		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
 	</bean>
 
 	<!-- (事务管理)transaction manager, use JtaTransactionManager for global tx -->
@@ -61,5 +72,27 @@
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource2" />
 	</bean>
+	
+	
+	<!-- <aop:aspectj-autoproxy/> -->
+	 <tx:advice id="tx" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="add*"  propagation="REQUIRED"/>
+			<tx:method name="get*" read-only="true" />
+		</tx:attributes>
+	</tx:advice> 
+	<!-- <aop:advisor advice-ref="tx" pointcut-ref="txPc" /> -->
+	<aop:config>
+		<!-- <aop:pointcut expression="execution(* com.zy.ssm.service.*.*(..))" id="pc"/> -->
+		<!-- <aop:pointcut  expression="execution(* com.zy.ssm.service.*.*(..))" id="txPc" /> -->
+		<!--  <aop:aspect ref="transactionManager">
+			<aop:before method="doBegin" pointcut-ref="pc" />
+			 <aop:after-returning method="doCommit" pointcut-ref="pc" returning="*"  />
+			<aop:after-throwing method="doRollback" pointcut-ref="pc"  />
+		</aop:aspect>  -->
+		<!-- <aop:advisor advice-ref="tx" pointcut-ref="pc" /> -->
+		
+		  <aop:advisor advice-ref="tx" pointcut="execution(* com.zy.ssm.service.impl.*.*(..))" />
+	</aop:config>
 
 </beans>
