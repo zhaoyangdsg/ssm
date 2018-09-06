@@ -93,7 +93,7 @@
 	m.create_date as m_create_date,m.user_name as m_name,m.user_avatar as m_avatar
 	where m.id = #{id}
 </select>
-<delete id="deleteMomentById" parameterType="Long">
+<delete id="deleteMomentById" parameterType="Integer">
 	delete from moment where id = #{moment_id}
 </delete>
 <insert id="addMoment" parameterType="com.zy.ssm.domain.Moment" useGeneratedKeys="true" keyProperty="id">
@@ -131,4 +131,12 @@
 	</set>
 	where id = #{id}
 </update>
+
+<insert id="zanMoment">
+	insert into moment_zan (moment_id,user_id) values(#{momentId},#{userId})
+</insert>
+
+<delete id="cacelZanMoment">
+	delete from moment_zan where moment_id = #{momentId} and user_id = #{userId}
+</delete>
 </mapper>

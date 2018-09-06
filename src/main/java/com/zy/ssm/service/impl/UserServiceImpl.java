@@ -27,7 +27,7 @@ public class UserServiceImpl implements IUserService {
 	IUserDao userDao;
 
 	@Override
-	public User getUserById(Long id) {
+	public User getUserById(Integer id) {
 		User user = userDao.getUserById(id);
 		if (user != null) {
 			return user;
@@ -85,7 +85,7 @@ public class UserServiceImpl implements IUserService {
 			String password = params.get("password");
 			// id 密码不为空,文件FileItem 不为空
 			if (StringUtils.hasText(password) && StringUtils.hasText(userId)&&fileItemsMap.size()>0) {
-				User user = userDao.getUserById(Long.parseLong(userId));
+				User user = userDao.getUserById(Integer.parseInt(userId));
 				if (StringUtils.hasText(user.getPassword()) && password.equals(user.getPassword())) {
 					String fileName = UUID.randomUUID().toString() + ".jpg";
 					FileItem  fileItem = fileItemsMap.get("pic");
@@ -102,7 +102,7 @@ public class UserServiceImpl implements IUserService {
 		return false;
 	}
 	
-	public boolean checkUser(Long id,String password) {
+	public boolean checkUser(Integer id,String password) {
 		if (id != null && StringUtils.hasText(password)) {
 			User user = userDao.getUserById(id);
 			if (user != null && StringUtils.hasText(user.getPassword())&& user.getPassword().equals(password)) {
@@ -128,7 +128,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public boolean followUser(Long followedId,Long userId) {
+	public boolean followUser(Integer followedId,Integer userId) {
 		Follow follow = new Follow();
 		follow.setFollowedId(followedId);
 		follow.setUserId(userId);
@@ -142,7 +142,7 @@ public class UserServiceImpl implements IUserService {
 		return false;
 	}
 	
-	public boolean cancelFollowUser(Long followedId,Long userId) {
+	public boolean cancelFollowUser(Integer followedId,Integer userId) {
 		Follow follow = new Follow();
 		follow.setFollowedId(followedId);
 		follow.setUserId(userId);

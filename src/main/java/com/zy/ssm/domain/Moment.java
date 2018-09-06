@@ -3,8 +3,8 @@ package com.zy.ssm.domain;
 import java.util.Date;
 
 public class Moment {
-	private Long id;
-	private Long userId;
+	private Integer id;
+	private Integer userId;
 	private String userAvatar;
 	private String userName;
 	private String imgs;
@@ -21,28 +21,30 @@ public class Moment {
 		super();
 		
 	}
+
 	
-//	public List<Comment> getComments() {
-//		return comments;
-//	}
-//	public void setComments(List<Comment> comments) {
-//		this.comments = comments;
-//	}
-	public Long getId() {
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	
-	public Long getUserId() {
+
+
+
+	public Integer getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Long userId) {
+
+
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
+
+
 
 	public String getImgs() {
 		return imgs;

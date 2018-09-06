@@ -7,11 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import com.zy.ssm.domain.Moment;
 
 public interface IMomentService {
-	List<Moment> getMomentsByUserId(Long id);
+	List<Moment> getMomentsByUserId(Integer id);
 	
 	boolean addMoment(HttpServletRequest request,Moment moment) ;
 	
-	Moment getMomentById(Long id);
+	Moment getMomentById(Integer id);
+	
+	boolean zanMoment(Integer momentId,Integer userId);
+	
+	boolean cancelZanMoment(Integer momentId,Integer userId);
 	
 	void addTest();
 }

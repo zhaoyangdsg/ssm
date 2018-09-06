@@ -1,21 +1,19 @@
 package com.zy.ssm.domain;
 
 public class Follow {
-	private Long followedId;
-	private Long userId;
-	public Long getFollowedId() {
+	private Integer followedId;
+	private Integer userId;
+	public Integer getFollowedId() {
 		return followedId;
 	}
-	public void setFollowedId(Long followedId) {
+	public void setFollowedId(Integer followedId) {
 		this.followedId = followedId;
 	}
-	public Long getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(Long userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
-	
-	
 	
 }

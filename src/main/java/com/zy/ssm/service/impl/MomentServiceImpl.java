@@ -1,6 +1,7 @@
 package com.zy.ssm.service.impl;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class MomentServiceImpl implements IMomentService {
 	IUserService userService;
 
 	@Override
-	public List<Moment> getMomentsByUserId(Long id) {
+	public List<Moment> getMomentsByUserId(Integer id) {
 		List<Moment> moments = momentDao.getMomentsByUserId(id);
 		System.out.println(moments.size());
 		if (moments.size() > 0) {
@@ -40,16 +41,18 @@ public class MomentServiceImpl implements IMomentService {
 		return null;
 	}
 
-	public Map<String, Object> getDetailMomentById(Long id) {
+	public Map<String, Object> getDetailMomentById(Integer id) {
 		Moment moment = momentDao.getMomentDetailById(id);
 		List<Comment> comments = commentDao.getCommentsByMomentId(id);
-
+		Map<String ,Object> resultMap = new HashMap<>();
+		resultMap.put("moment", moment);
+		resultMap.put("comments",comments);
 		return null;
 	}
 
 	public boolean addMoment(HttpServletRequest request, Moment moment) {
 
-		Long userId = Long.valueOf(moment.getUserId());
+		Integer userId = Integer.valueOf(moment.getUserId());
 		if (userId != null && moment.getContent() != null) {
 			String fileName = UploadUtil.uploadFileWithName(request, "pic");
 			User user = userService.getUserById(userId);
@@ -73,7 +76,7 @@ public class MomentServiceImpl implements IMomentService {
 	}
 
 	@Override
-	public Moment getMomentById(Long id) {
+	public Moment getMomentById(Integer id) {
 		Moment moment = momentDao.getMomentDetailById(id);
 		if (moment != null) {
 			return moment;
@@ -84,6 +87,22 @@ public class MomentServiceImpl implements IMomentService {
 	@Override
 	public void addTest() {
 
+	}
+
+	@Override
+	public boolean zanMoment(Integer momentId, Integer userId) {
+		if ( momentDao.zanMoment(momentId, userId) > 0) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean cancelZanMoment(Integer momentId, Integer userId) {
+		if (momentDao.zanMoment(momentId, userId) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 public class Comment {
-	private Long id;
-	private Long parentId;
-	private Long userId;
+	private Integer id;
+	private Integer parentId;
+	private Integer userId;
 	private String userAvatar;
 	private String userName;
 	private String content;
@@ -18,18 +18,7 @@ public class Comment {
 	public Comment() {
 		super();
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public Long getUserId() {
-		return userId;
-	}
-	public void setUserId(Long userId) {
-		this.userId = userId;
-	}
+
 	public String getContent() {
 		return content;
 	}
@@ -71,12 +60,30 @@ public class Comment {
 	public void setCommentsList(List<Comment> commentsList) {
 		this.commentsList = commentsList;
 	}
-	public Long getParentId() {
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getParentId() {
 		return parentId;
 	}
-	public void setParentId(Long parentId) {
+
+	public void setParentId(Integer parentId) {
 		this.parentId = parentId;
 	}
-	
+
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.userId = userId;
+	}
+
 	
 }

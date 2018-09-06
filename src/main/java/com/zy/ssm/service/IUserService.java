@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.zy.ssm.domain.User;
 public interface IUserService {
 	public enum RegistResult{SUCCESS,EXSIT,FAILURE}
-	User getUserById(Long id);
+	User getUserById(Integer id);
 	
 	User getUserByMobile(String id);
 	
@@ -15,7 +15,7 @@ public interface IUserService {
 	
 	boolean uploadAvater(HttpServletRequest request);
 	
-	boolean checkUser(Long id,String password);
+	boolean checkUser(Integer id,String password);
 	
-	boolean followUser(Long followedId,Long userId);
+	boolean followUser(Integer followedId,Integer userId);
 }

@@ -104,7 +104,7 @@ public class UserAction {
 	public Object uploadAvater(ModelAndView model, HttpServletRequest request, User user) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
-		Long id = Long.valueOf(user.getId());
+		Integer id =  Integer.valueOf(user.getId());
 		String password = user.getPassword();
 		if (userService.checkUser(id, password)) {
 			String fileName = UploadUtil.uploadFileWithName(request, "pic");
@@ -147,8 +147,8 @@ public class UserAction {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
 		if (StringUtils.hasText(userId)&&StringUtils.hasText(followedId) && followedId != userId) {
-			Long l_userId = Long.parseLong(userId);
-			Long l_followedId = Long.parseLong(followedId);
+			Integer l_userId = Integer.valueOf(userId);
+			Integer l_followedId = Integer.valueOf(followedId);
 			if (userService.getUserById(l_userId) != null && userService.getUserById(l_followedId) != null ) {
 				if ( userService.followUser(l_followedId, l_userId)) {
 					result.put("success", true);

@@ -3,7 +3,7 @@ package com.zy.ssm.domain;
 import java.util.Date;
 
 public class User {
-	private Long id;
+	private Integer id;
 	private String name;
 	private String nickName;
 	private String password;
@@ -13,13 +13,14 @@ public class User {
 	private Date lastLoginDate ;
 	private Integer status;
 
-	public Long getId() {
+	
+
+	public Integer getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}

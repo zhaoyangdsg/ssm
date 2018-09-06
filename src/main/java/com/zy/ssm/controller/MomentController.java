@@ -33,7 +33,7 @@ public class MomentController {
 	@RequestMapping("/momentsOfUser")
 	public Object getUserMoment(HttpServletRequest request, String id) {
 		System.out.println(id);
-		List<Moment> moments = momentService.getMomentsByUserId(Long.parseLong(id));
+		List<Moment> moments = momentService.getMomentsByUserId(Integer.parseInt(id));
 		if ("POST".equals(request.getMethod())) {
 			return JSON.toJSONString(moments);
 		}
@@ -75,7 +75,7 @@ public class MomentController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
 		if (moment.getId() != null && moment.getUserId() != null && moment.getContent() != null) {
-			Long id = Long.valueOf(moment.getId());
+			Integer id = Integer.valueOf(moment.getId());
 			Moment m = momentService.getMomentById(id);
 			if (m !=null) {
 				
