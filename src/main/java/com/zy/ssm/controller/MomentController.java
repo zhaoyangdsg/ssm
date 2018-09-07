@@ -40,19 +40,51 @@ public class MomentController {
 		return null;
 	}
 
+	@ResponseBody
 	@RequestMapping("/momentZan")
 	public Object zan(HttpServletRequest request, String userId, String momentId) {
-
+		Map<String,Object> result = new HashMap<>();
+		result.put("success", false);
+		if (userId != null && momentId != null) {
+			if ( momentService.zanMoment(Integer.valueOf(momentId), Integer.valueOf(userId))) {
+				result.put("success", false);
+			}
+		}
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
 		return null;
 	}
 
+	@ResponseBody
+	@RequestMapping("/cancelZan")
 	public Object cancelZan(HttpServletRequest request, String userId, String momentId) {
-
+		Map<String,Object> result = new HashMap<>();
+		result.put("success", false);
+		if (userId != null && momentId != null) {
+			if ( momentService.cancelZanMoment(Integer.valueOf(momentId), Integer.valueOf(userId))) {
+				result.put("success", true);
+			}
+		}
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
 		return null;
 	}
 
+	@ResponseBody
+	@RequestMapping("/deleteMoment")
 	public Object deleteMoment(HttpServletRequest request, String userId, String momentId) {
-
+		Map<String,Object> result = new HashMap<>();
+		result.put("success", false);
+		if (momentId != null && userId != null) {
+			if ( momentService.deleteMomoent(Integer.valueOf(momentId),Integer.valueOf(userId))) {
+				result.put("success", true);
+			}
+		}
+		if ("POST".equals(request.getMethod())) {
+			return JSON.toJSON(result);
+		}
 		return null;
 	}
 
@@ -71,7 +103,10 @@ public class MomentController {
 		return null;
 	}
 
+	@ResponseBody
+	@RequestMapping("/updateMoment")
 	public Object updateMoment(HttpServletRequest request, Moment moment) {
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("success", false);
 		if (moment.getId() != null && moment.getUserId() != null && moment.getContent() != null) {

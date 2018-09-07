@@ -44,9 +44,9 @@ public class MomentServiceImpl implements IMomentService {
 	public Map<String, Object> getDetailMomentById(Integer id) {
 		Moment moment = momentDao.getMomentDetailById(id);
 		List<Comment> comments = commentDao.getCommentsByMomentId(id);
-		Map<String ,Object> resultMap = new HashMap<>();
+		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("moment", moment);
-		resultMap.put("comments",comments);
+		resultMap.put("comments", comments);
 		return null;
 	}
 
@@ -91,16 +91,42 @@ public class MomentServiceImpl implements IMomentService {
 
 	@Override
 	public boolean zanMoment(Integer momentId, Integer userId) {
-		if ( momentDao.zanMoment(momentId, userId) > 0) {
-			return true;
+		if (momentId != null && userId != null) {
+			if (momentDao.zanMoment(momentId, userId) > 0) {
+				return true;
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public boolean cancelZanMoment(Integer momentId, Integer userId) {
-		if (momentDao.zanMoment(momentId, userId) > 0) {
-			return true;
+		if (momentId != null && userId != null) {
+			if (momentDao.cacelZanMoment (momentId, userId) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deleteMomoent(Integer momentId, Integer userId) {
+		if (this.isAuthor(momentId, userId)) {
+			if ( momentDao.deleteMomentById(momentId) > 0 ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isAuthor(Integer momentId, Integer userId) {
+		if (momentId != null && userId != null) {
+			Moment moment = momentDao.getMomentDetailById(momentId);
+			if (moment != null && moment.getUserId() !=null) {
+				if ( moment.getUserId().equals(userId)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}

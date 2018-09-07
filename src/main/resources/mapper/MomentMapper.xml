@@ -91,10 +91,11 @@
 	left join user u2 on c.user_id = u2.id -->
 	select m.id as m_id, m.content as m_content,m.short_content ,m.user_id as m_user_id,m.zan_num,m.comment_num,
 	m.create_date as m_create_date,m.user_name as m_name,m.user_avatar as m_avatar
+	from moment m
 	where m.id = #{id}
 </select>
 <delete id="deleteMomentById" parameterType="Integer">
-	delete from moment where id = #{moment_id}
+	delete from moment where id = #{momentId}
 </delete>
 <insert id="addMoment" parameterType="com.zy.ssm.domain.Moment" useGeneratedKeys="true" keyProperty="id">
 	insert into moment (user_id,user_name,user_avatar,imgs,content,short_content,create_date) 
@@ -133,10 +134,10 @@
 </update>
 
 <insert id="zanMoment">
-	insert into moment_zan (moment_id,user_id) values(#{momentId},#{userId})
+	insert into moment_zan (moment_id,user_id) values (#{arg0},#{arg1})
 </insert>
 
 <delete id="cacelZanMoment">
-	delete from moment_zan where moment_id = #{momentId} and user_id = #{userId}
+	delete from moment_zan where moment_id = #{arg0} and user_id = #{arg1}
 </delete>
 </mapper>

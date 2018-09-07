@@ -18,4 +18,6 @@ public interface IMomentService {
 	boolean cancelZanMoment(Integer momentId,Integer userId);
 	
 	void addTest();
+	
+	boolean deleteMomoent(Integer momentId,Integer userId);
 }

@@ -24,8 +24,8 @@
 	</select>
 	<insert id="addUser" parameterType="com.zy.ssm.domain.User"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into user (name,nick_name,password,mobile,create_date,avater,status)
-		values(#{name},#{nickName},#{password},#{mobile},#{createDate},#{avater},#{status})
+		insert into user (name,nick_name,password,mobile,create_date,avatar,status)
+		values(#{name},#{nickName},#{password},#{mobile},#{createDate},#{avatar},#{status})
 	</insert>
 	<update id="updateUser" parameterType="com.zy.ssm.domain.User">
 		update user 
@@ -39,8 +39,8 @@
 			<if test="password != null and password != ''">
 				password=#{password},
 			</if>
-			<if test="avater != null and avater != ''" >
-				avater=#{avater},
+			<if test="avatar != null and avatar != ''" >
+				avatar=#{avatar},
 			</if>
 			<if test="createDate != null">
 				create_date=#{createDate},

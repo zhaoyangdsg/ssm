@@ -19,4 +19,6 @@ public interface IMomentDao {
 	int zanMoment(Integer momentId,Integer userId);
 	
 	int cacelZanMoment(Integer momentId,Integer userId);
+	
+	int deleteMomentById(Integer momentId);
 }
